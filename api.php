@@ -4,7 +4,8 @@ header('Content-Type: application/json');
 
 // Function to execute shell commands safely
 function runCommand($command) {
-    return trim(shell_exec($command));
+    $output = shell_exec($command);
+    return $output !== null ? trim($output) : '';
 }
 
 // Collect device information
