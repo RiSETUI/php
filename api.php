@@ -37,14 +37,16 @@ while (true) {
         'network_type' => runCommand('getprop gsm.network.type') ?? 'Unknown',
         'mac_address' => runCommand('cat /sys/class/net/wlan0/address') ?? 'Unknown',
         'rx_bytes' => intval(runCommand('cat /sys/class/net/wlan0/statistics/rx_bytes')) ?: 0,
-        'tx_bytes' => intval(runCommand('cat /sys/class/net/wlan0/statistics/tx_bytes')) ?: 0
+        'tx_bytes' => intval(runCommand('cat /sys/class/net/wlan0/statistics/tx_bytes')) ?: 0,
+        'today_rx' => intval(runCommand('cat /sys/class/net/wlan0/statistics/rx_bytes')) ?: 0,
+        'today_tx' => intval(runCommand('cat /sys/class/net/wlan0/statistics/tx_bytes')) ?: 0
     ];
 
     // Collect system information
     $system = [
         'cpu_usage' => round(floatval(runCommand('top -bn1 | grep "CPU:" | awk \'{print $2}\' | sed \'s/%//\'')) ?: 0, 2),
         'cpu_cores' => intval(runCommand('nproc')) ?: 0,
-        'cpu_freq' => intval(runCommand('cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq')) ?: 0,
+        'cpu_freq' => intval(runCommand('cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq')) ?: 0, // in kHz
         'ram_usage' => round(floatval(runCommand('free | grep Mem | awk \'{print ($3/$2) * 100}\'')) ?: 0, 2),
         'ram_total' => intval(runCommand('free | grep Mem | awk \'{print $2}\'')) ?: 0, // in KB
         'ram_used' => intval(runCommand('free | grep Mem | awk \'{print $3}\'')) ?: 0, // in KB
@@ -86,7 +88,9 @@ while (true) {
             'x' => floatval(runCommand('cat /sys/class/input/input2/event0 | awk \'{print $1}\'')) ?: 0.0,
             'y' => floatval(runCommand('cat /sys/class/input/input2/event1 | awk \'{print $2}\'')) ?: 0.0,
             'z' => floatval(runCommand('cat /sys/class/input/input2/event2 | awk \'{print $3}\'')) ?: 0.0
-        ]
+        ],
+        'proximity' => intval(runCommand('cat /sys/class/input/input3/event0 | awk \'{print $1}\'')) ?: 0,
+        'light' => intval(runCommand('cat /sys/class/input/input4/event0 | awk \'{print $1}\'')) ?: 0
     ];
 
     // Collect system logs
