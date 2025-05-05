@@ -2,14 +2,6 @@
 // Set the content type to JSON
 header('Content-Type: application/json');
 
-// Check if the script is running on a rooted device with Magisk and BusyBox
-if (!file_exists('/sbin/magisk') || !shell_exec('which busybox')) {
-    echo json_encode([
-        'error' => 'This script requires a rooted device with Magisk and BusyBox installed.'
-    ]);
-    exit;
-}
-
 // Function to execute shell commands safely
 function runCommand($command) {
     return trim(shell_exec($command));
